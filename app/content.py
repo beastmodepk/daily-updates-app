@@ -60,18 +60,43 @@ def get_weather_forecast(coords=Config.WEATHER_FORCAST['DEFAULT_COORDS']):
         print(error)
 
 
-# def get_wikipedia_article():
-#     pass
+def get_wikipedia_article():
+    """
+    Get a random wiki article
+    """
+    try: # retrieve random Wikipedia article
+        response = requests.get(Config.WIKI_URL)
+        response.raise_for_status()
+
+        data = response.json()
+        send_data = {'title': data['title'],
+                'extract': data['extract'],
+                'url': data['content_urls']['desktop']['page']}
+
+        return send_data
+    except AttributeError as error:
+        print(f"error reaching URL: {error}")
 
 if __name__ == '__main__':
 #----------------------------------------------
     # test get_random_quote()
+    STARS = '*'*20
     quote = get_random_quote()
     print("Testing get_random_quote")
     print(f"Quote for the day is:\n{quote['text']}")
     print(f"Auther: {quote['author']}")
-    print('*'*20)
+    print(STARS)
+#----------------------------------------------
+    # test get_weather_forecast()
+    print("Testing get_weather_forecast")
     san_fran = {"lat": "37.773972","lon": "-122.431297"}
-    url = get_weather_forecast()
-    print(url)
+    forcast = get_weather_forecast()
+    print(forcast)
+    print(STARS)
+#----------------------------------------------
+    # test get_wikipedia_article()
+    print("Testing get_wikipedia_article")
+    wiki_article = get_wikipedia_article()
+    print(wiki_article)
+    print(STARS)
 #----------------------------------------------
